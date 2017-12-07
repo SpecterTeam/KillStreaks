@@ -40,6 +40,9 @@ class PlayerEvents implements Listener {
 			    }
 				$this->pl->addStreak($killer);
 			    if($kstreak = $this->pl->getStreak($killer) != 0){
+				$message = $this->pl->config->get("on-streak-message");
+				$msg = str_replace("{streak}", "{$kstreak}", $message);
+				$killer->sendMessage($msg);
 				if($comm = $this->pl->config->get($kstreak)){
 				$command = str_replace("{player}", "{$killer->getName()}", $comm);
 				$command = str_replace("{streak}", "{$kstreak}", $command);
