@@ -3,65 +3,82 @@
 namespace specter\killstreaks;
 
 use pocketmine\Player;
-use pocketmine\Server;
-use pocketmine\command\CommandSender;
-use pocketmine\command\ConsoleCommandSender;
-use pocketmine\command\Command;
-use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 
-class Main extends PluginBase implements Listener {
-	
-	public function onEnable(){
-  
-		$this->getServer()->getLogger()->notice("[KillStreak] Enabled! - By Infernus101 => SpecterTeam");
-    
-		$file = "config.yml";
-    
-		if(!file_exists($this->getDataFolder() . $file)){
-		  @mkdir($this->getDataFolder());
-		  file_put_contents($this->getDataFolder() . $file, $this->getResource($file));
-		}
-    
-		$this->config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
-    
-		$this->players = [];
-		
-		$this->streaks = (new Config($this->getDataFolder() . "/streaks.json", Config::JSON));
-		
-		$this->getServer()->getPluginManager()->registerEvents(new PlayerEvents($this), $this);
-    
-	}
-	
-	public function onDisable(){
-  
-		$this->saveStreak();
-		$this->getServer()->getLogger()->notice("[KillStreak] Disabled! - By Infernus101 => SpecterTeam");
-    
-	}
-	
-	public function saveStreak(){
-		@unlink($this->getDataFolder() . "/streaks.json");
-		$d = new Config($this->getDataFolder() . "/streaks.json", Config::JSON);
-			foreach($this->players as $player => $streak){
-			  $d->set($player, $streak);
-			  $d->save();
-			  $d->reload();
-			}
-	}
-  
-	public function getStreak(Player $player){
-	  return isset($this->players[strtolower($player->getName())]) ? $this->players[strtolower($player->getName())] : 0;
-	}
-	
-	public function addStreak(Player $player){
-		$this->players[strtolower($player->getName())] = $this->getStreak($player) + 1;
-	}
-	
-	public function removeStreak(Player $player){
-		$this->players[strtolower($player->getName())] = 0;
-	}
-	
+class Main extends PluginBase {
+
+    const CONFIG_FILE = "config.yml";
+    const STREAKS_FILE = "streaks.json";
+
+    public $players = [];
+
+    public $streaks, $config;
+
+    public function onEnable(){
+        $this->getServer()->getLogger()->notice("[KillStreak] Enabled! made by " . TextFormat::UNDERLINE ."github.com/SpecterTeam");
+
+        if(!is_dir($this->getDataFolder())) @mkdir($this->getDataFolder());
+
+        $this->config = new Config($this->getDataFolder() . self::CONFIG_FILE, Config::YAML);
+        $this->streaks = (new Config($this->getDataFolder() . DIRECTORY_SEPARATOR . self::STREAKS_FILE, Config::JSON));
+
+        $this->getServer()->getPluginManager()->registerEvents(new PlayerEvents($this), $this);
+    }
+
+    public function onDisable(){
+        $this->saveStreak();
+        $this->getServer()->getLogger()->notice("[KillStreak] Disabled! made by " . TextFormat::UNDERLINE ."github.com/SpecterTeam");
+
+    }
+
+    public function saveStreak(){
+        foreach($this->players as $player => $streak){
+            if($this->streaks instanceof Config) {
+                $this->streaks->set($player, $streak);
+                $this->streaks->save();
+            }
+        }
+    }
+
+    /**
+     * @param Player $player
+     * @return int|mixed
+     */
+    public function getStreak(Player $player){
+        return isset($this->players[strtolower($player->getName())]) ? $this->players[strtolower($player->getName())] : 0;
+    }
+
+    /**
+     * @param Player $player
+     * @param int $amount
+     */
+    public function addStreak(Player $player, int $amount = 1){
+        $this->players[strtolower($player->getName())] += $amount;
+    }
+
+    /**
+     * @param Player $player
+     */
+    public function resetStreak(Player $player){
+        $this->players[strtolower($player->getName())] = 0;
+    }
+
+    /**
+     * @return Player[]
+     */
+    public function getPlayers() : array
+    {
+        return $this->players;
+    }
+
+    /**
+     * @param Player[] $players
+     */
+    public function setPlayers(array $players)
+    {
+        $this->players = $players;
+    }
+
 }
