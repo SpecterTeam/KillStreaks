@@ -1,6 +1,6 @@
 <?php
 
-namespace Infernus101;
+namespace specter\killstreaks;
 
 use pocketmine\Player;
 use pocketmine\Server;
