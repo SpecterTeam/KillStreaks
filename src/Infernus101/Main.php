@@ -1,4 +1,5 @@
 <?php
+
 namespace Infernus101;
 use pocketmine\Player;
 use pocketmine\Server;
@@ -9,6 +10,7 @@ use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
+
 class Main extends PluginBase implements Listener {
 	
 	public function onEnable(){
@@ -25,6 +27,9 @@ class Main extends PluginBase implements Listener {
 		$this->config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
     
 		$this->players = [];
+		
+		$this->streaks = (new Config($this->getDataFolder() . "/streaks.json", Config::JSON));
+		
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerEvents($this), $this);
     
 	}
@@ -52,6 +57,10 @@ class Main extends PluginBase implements Listener {
 	
 	public function addStreak(Player $player){
 		$this->players[strtolower($player->getName())] = $this->getStreak($player) + 1;
+	}
+	
+	public function removeStreak(Player $player){
+		$this->players[strtolower($player->getName())] = 0;
 	}
 	
 }
