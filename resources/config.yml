@@ -1,0 +1,10 @@
+---
+### CONFIG - Infernus101###
+## Streak lost message {streak} will be replaced by streak count of the dead player!
+streak-lose-message: "Oh no! you lost your streak of {streak}!"
+## Streak count : Streak command, the command will be executed once player reaches that streak!
+## Tags:
+## {player} will be replaced by player's name
+## {streak} will be replaced by player's streak
+5: tell {player} {streak} kill streak!
+...
