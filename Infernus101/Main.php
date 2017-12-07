@@ -35,27 +35,27 @@ class Main extends PluginBase implements Listener {
 	
 	public function onDisable(){
   
-		$this->saveStat();
+		$this->saveStreak();
 		$this->getServer()->getLogger()->notice("[KillStreak] Disabled! - By Infernus101 => SpecterTeam");
     
 	}
 	
-	public function saveStat(){
+	public function saveStreak(){
 		@unlink($this->getDataFolder() . "/streaks.json");
 		$d = new Config($this->getDataFolder() . "/streaks.json", Config::JSON);
-			foreach($this->players as $player => $stats){
-			  $d->set($player, $stats);
+			foreach($this->players as $player => $streak){
+			  $d->set($player, $streak);
 			  $d->save();
 			  $d->reload();
 			}
 	}
   
-	public function getStat(Player $player){
+	public function getStreak(Player $player){
 	  return isset($this->players[strtolower($player->getName())]) ? $this->players[strtolower($player->getName())] : 0;
 	}
 	
-	public function addStat(Player $player){
-		$this->players[strtolower($player->getName())] = $this->getStat($player) + 1;
+	public function addStreak(Player $player){
+		$this->players[strtolower($player->getName())] = $this->getStreak($player) + 1;
 	}
 	
 }
