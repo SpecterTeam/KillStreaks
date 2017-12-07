@@ -25,6 +25,7 @@ class PlayerEvents implements Listener {
 	}else{
 	$this->pl->players[strtolower($ev->getPlayer()->getName())] = $this->pl->streaks->get(strtolower($ev->getPlayer()->getName()));
 	}
+	}
 	
 	public function onDeath(PlayerDeathEvent $event){
 	$p = $event->getEntity();
