@@ -34,7 +34,7 @@ class PlayerEvents implements Listener {
 		if($killer instanceof Player){
 			if(strtolower($killer->getName()) != strtolower($p->getName())){
 			    if($pstreak = $this->pl->getStreak($p) != 0){
-			      	$this->pl->removeStreak($p);
+			      	$this->pl->resetStreak($p);
 				$message = $this->pl->config->get("streak-lose-message");
 				$msg = str_replace("{streak}", "{$pstreak}", $message);
 			      	$p->sendMessage($msg);
