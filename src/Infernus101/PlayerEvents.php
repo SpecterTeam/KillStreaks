@@ -33,15 +33,18 @@ class PlayerEvents implements Listener {
 		if($killer instanceof Player){
 			if(strtolower($killer->getName()) != strtolower($p->getName())){
 			    if($pstreak = $this->pl->getStreak($p) != 0){
-			      $this->pl->removeStreak($p);
-			      $p->sendMessage($this->pl->config->get("streak-lose-message"));
+			      	$this->pl->removeStreak($p);
+				$message = $this->pl->config->get("streak-lose-message");
+				$msg = str_replace("{streak}", "{$pstreak}", $message);
+			      	$p->sendMessage($msg);
 			    }
 				$this->pl->addStreak($killer);
 			    if($kstreak = $this->pl->getStreak($killer) != 0){
-			      if($comm = $this->pl->config->get($kstreak)){
+				if($comm = $this->pl->config->get($kstreak)){
 				$command = str_replace("{player}", "{$killer->getName()}", $comm);
+				$command = str_replace("{streak}", "{$kstreak}", $command);
 				$this->pl->getServer()->dispatchCommand(new ConsoleCommandSender(), "$command");
-			      }
+			      	}
 			    }
 			}
 		}
