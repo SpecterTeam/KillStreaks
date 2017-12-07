@@ -4,8 +4,7 @@ namespace specter\killstreaks;
 
 use pocketmine\command\ConsoleCommandSender;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\event\player\PlayerDeathEvent;
+use pocketmine\event\player\{PlayerJoinEvent, PlayerDeathEvent};
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\Player;
 use pocketmine\utils\Config;
