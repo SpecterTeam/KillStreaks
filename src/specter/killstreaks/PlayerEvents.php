@@ -46,8 +46,9 @@ class PlayerEvents implements Listener {
                     $this->getPlugin()->addStreak($killer);
                     if(($kstreak = $this->getPlugin()->getStreak($killer)) != 0){
                         $killer->sendMessage(str_replace("{streak}", "{$kstreak}", $this->getPlugin()->config->get("on-streak-message")));
-                        if($command = $this->getPlugin()->config->get($kstreak)){
-                            $this->getPlugin()->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace("{streak}", "{$kstreak}", str_replace("{player}", "{$killer->getName()}", $command)));
+                        $commands = $this->getPlugin()->config->get($kstreak);
+                        foreach($commands as $command){
+                            $this->getPlugin()->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace("{streak}", $kstreak, str_replace("{player}", $killer->getName(), $command)));
                         }
                     }
                 }
