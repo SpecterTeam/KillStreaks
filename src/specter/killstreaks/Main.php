@@ -17,11 +17,16 @@ class Main extends PluginBase {
     public $streaks, $config;
 
     public function onEnable(){
-        $this->getServer()->getLogger()->notice("[KillStreak] Enabled! made by " . TextFormat::UNDERLINE ."github.com/SpecterTeam");
+        $this->getServer()->getLogger()->notice("[KillStreaks] Enabled! Made by " . TextFormat::UNDERLINE ."github.com/SpecterTeam");
 
         if(!is_dir($this->getDataFolder())) @mkdir($this->getDataFolder());
 
-        $this->config = new Config($this->getDataFolder() . self::CONFIG_FILE, Config::YAML);
+		if(!file_exists($this->getDataFolder() . self::CONFIG_FILE)) {
+			@mkdir($this->getDataFolder());
+			file_put_contents($this->getDataFolder() . self::CONFIG_FILE, $this->getResource(self::CONFIG_FILE));
+		}
+		
+		$this->config = new Config($this->getDataFolder() . self::CONFIG_FILE, Config::YAML);
         $this->streaks = (new Config($this->getDataFolder() . DIRECTORY_SEPARATOR . self::STREAKS_FILE, Config::JSON));
 
         $this->getServer()->getPluginManager()->registerEvents(new PlayerEvents($this), $this);
@@ -29,7 +34,7 @@ class Main extends PluginBase {
 
     public function onDisable(){
         $this->saveStreak();
-        $this->getServer()->getLogger()->notice("[KillStreak] Disabled! made by " . TextFormat::UNDERLINE ."github.com/SpecterTeam");
+        $this->getServer()->getLogger()->notice("[KillStreaks] Disabled! Made by " . TextFormat::UNDERLINE ."github.com/SpecterTeam");
 
     }
 
@@ -47,7 +52,7 @@ class Main extends PluginBase {
      * @return int|mixed
      */
     public function getStreak(Player $player){
-        return isset($this->players[strtolower($player->getName())]) ? $this->players[strtolower($player->getName())] : 0;
+        return $this->players[strtolower($player->getName())];
     }
 
     /**
@@ -55,7 +60,7 @@ class Main extends PluginBase {
      * @param int $amount
      */
     public function addStreak(Player $player, int $amount = 1){
-        $this->players[strtolower($player->getName())] += $amount;
+        $this->players[strtolower($player->getName())] = $this->getStreak($player) + $amount;
     }
 
     /**
@@ -68,16 +73,14 @@ class Main extends PluginBase {
     /**
      * @return Player[]
      */
-    public function getPlayers() : array
-    {
+    public function getPlayers() : array{
         return $this->players;
     }
 
     /**
      * @param Player[] $players
      */
-    public function setPlayers(array $players)
-    {
+    public function setPlayers(array $players){
         $this->players = $players;
     }
 
