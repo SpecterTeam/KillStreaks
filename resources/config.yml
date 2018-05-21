@@ -9,9 +9,9 @@ streak-lose-message: "Oh no! you lost your streak of {streak}!"
 ## {player} will be replaced by player's name
 ## {streak} will be replaced by player's streak
 5: 
-  tell {player} {streak} kill streak!
-  say {player} is on a {streak} killStreak!
+  - "tell {player} {streak} kill streak!"
+  - "say {player} is on a {streak} killStreak!"
 10: 
-  tell {player} {streak} kill streak!
-  say {player} is on a {streak} killStreak!
+  - "tell {player} {streak} kill streak!"
+  - "say {player} is on a {streak} killStreak!"
 ...
